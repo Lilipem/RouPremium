@@ -1,0 +1,778 @@
+/**
+ * ESTILOS CSS PARA TELA APP CLIENTE
+ * 
+ * Este arquivo contém todos os estilos para simular uma tela de app móvel
+ * para o sistema RouPremium. Inclui:
+ * - Layout responsivo mobile-first
+ * - Componentes reutilizáveis
+ * - Estados de loading, erro e vazio
+ * - Animações e transições
+ * - Paleta de cores consistente
+ */
+
+/* ======================================================================================== */
+/* VARIÁVEIS CSS E CONFIGURAÇÕES GLOBAIS */
+/* ======================================================================================== */
+
+:root {
+  /* Paleta de cores principal */
+  --cor-primaria: #6366f1;           /* Índigo principal */
+  --cor-primaria-escura: #4f46e5;    /* Índigo escuro para hover */
+  --cor-secundaria: #f59e0b;         /* Âmbar para acentos */
+  --cor-sucesso: #10b981;            /* Verde para sucesso */
+  --cor-erro: #ef4444;               /* Vermelho para erros */
+  --cor-aviso: #f59e0b;              /* Âmbar para avisos */
+  
+  /* Cores neutras */
+  --cor-fundo: #f8fafc;              /* Fundo claro */
+  --cor-superficie: #ffffff;         /* Superfície branca */
+  --cor-superficie-escura: #f1f5f9;  /* Superfície com contraste */
+  --cor-borda: #e2e8f0;              /* Bordas suaves */
+  --cor-texto: #1e293b;              /* Texto principal */
+  --cor-texto-secundario: #64748b;   /* Texto secundário */
+  --cor-texto-claro: #94a3b8;        /* Texto claro */
+  
+  /* Sombras */
+  --sombra-suave: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --sombra-media: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --sombra-forte: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --sombra-telefone: 0 20px 25px rgba(0, 0, 0, 0.15);
+  
+  /* Raios de borda */
+  --raio-pequeno: 6px;
+  --raio-medio: 12px;
+  --raio-grande: 16px;
+  --raio-telefone: 24px;
+  
+  /* Espaçamentos */
+  --espaco-xs: 4px;
+  --espaco-sm: 8px;
+  --espaco-md: 16px;
+  --espaco-lg: 24px;
+  --espaco-xl: 32px;
+  --espaco-2xl: 48px;
+  
+  /* Transições */
+  --transicao-rapida: 0.15s ease;
+  --transicao-media: 0.3s ease;
+  --transicao-lenta: 0.5s ease;
+}
+
+/* Reset básico para melhor consistência */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ======================================================================================== */
+/* LAYOUT PRINCIPAL E SIMULAÇÃO DE TELEFONE */
+/* ======================================================================================== */
+
+.app-completo {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--cor-fundo) 0%, #e2e8f0 100%);
+  padding: var(--espaco-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espaco-lg);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* Controles de teste (só para desenvolvimento) */
+.controles-teste {
+  background: var(--cor-superficie);
+  padding: var(--espaco-md);
+  border-radius: var(--raio-medio);
+  box-shadow: var(--sombra-suave);
+  border: 1px solid var(--cor-borda);
+}
+
+.controles-teste button {
+  background: var(--cor-primaria);
+  color: white;
+  border: none;
+  padding: var(--espaco-sm) var(--espaco-md);
+  border-radius: var(--raio-pequeno);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transicao-rapida);
+}
+
+.controles-teste button:hover {
+  background: var(--cor-primaria-escura);
+  transform: translateY(-1px);
+  box-shadow: var(--sombra-media);
+}
+
+/* Simulação visual de telefone */
+.simulacao-telefone {
+  width: 375px;                    /* Largura típica de iPhone */
+  max-width: calc(100vw - 32px);   /* Responsivo para telas pequenas */
+  height: 667px;                   /* Altura típica de iPhone */
+  background: var(--cor-superficie);
+  border-radius: var(--raio-telefone);
+  box-shadow: var(--sombra-telefone);
+  border: 8px solid #2d3748;       /* Simula moldura do telefone */
+  overflow: hidden;
+  position: relative;
+}
+
+/* "Notch" do telefone (opcional) */
+.simulacao-telefone::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 20px;
+  background: #2d3748;
+  border-radius: 0 0 12px 12px;
+  z-index: 10;
+}
+
+/* ======================================================================================== */
+/* COMPONENTES BASE REUTILIZÁVEIS */
+/* ======================================================================================== */
+
+/* Container de tela - base para todos os estados */
+.screen-container {
+  width: 100%;
+  height: 100%;
+  background: var(--cor-fundo);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Cabeçalho das telas */
+.screen-header {
+  background: var(--cor-superficie);
+  padding: var(--espaco-md) var(--espaco-lg);
+  border-bottom: 1px solid var(--cor-borda);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 60px;
+  position: relative;
+  z-index: 5;
+}
+
+.screen-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--cor-texto);
+  text-align: center;
+  flex: 1;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: var(--cor-primaria);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: var(--espaco-sm);
+  border-radius: var(--raio-pequeno);
+  transition: all var(--transicao-rapida);
+  position: absolute;
+  left: var(--espaco-md);
+}
+
+.back-button:hover {
+  background: rgba(99, 102, 241, 0.1);
+  transform: translateX(-2px);
+}
+
+.header-actions {
+  position: absolute;
+  right: var(--espaco-md);
+}
+
+/* Botões principais */
+.primary-button {
+  background: var(--cor-primaria);
+  color: white;
+  border: none;
+  padding: var(--espaco-md) var(--espaco-xl);
+  border-radius: var(--raio-medio);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transicao-media);
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
+  display: block;
+  box-shadow: var(--sombra-suave);
+}
+
+.primary-button:hover {
+  background: var(--cor-primaria-escura);
+  transform: translateY(-2px);
+  box-shadow: var(--sombra-media);
+}
+
+.primary-button:disabled {
+  background: var(--cor-texto-claro);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ======================================================================================== */
+/* ESTADOS DE INTERFACE (Loading, Error, Empty) */
+/* ======================================================================================== */
+
+/* Estado de carregamento */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espaco-2xl);
+  text-align: center;
+  color: var(--cor-texto-secundario);
+  flex: 1;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--cor-borda);
+  border-top: 3px solid var(--cor-primaria);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--espaco-md);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Estado de erro */
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espaco-2xl);
+  text-align: center;
+  flex: 1;
+}
+
+.error-state h3 {
+  color: var(--cor-erro);
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: var(--espaco-sm);
+}
+
+.error-state p {
+  color: var(--cor-texto-secundario);
+  margin-bottom: var(--espaco-lg);
+  line-height: 1.5;
+}
+
+.retry-button {
+  background: var(--cor-erro);
+  color: white;
+  border: none;
+  padding: var(--espaco-sm) var(--espaco-md);
+  border-radius: var(--raio-pequeno);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transicao-rapida);
+}
+
+.retry-button:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+
+/* Estado vazio */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espaco-2xl);
+  text-align: center;
+  flex: 1;
+}
+
+.empty-state h3 {
+  color: var(--cor-texto);
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: var(--espaco-sm);
+}
+
+.empty-state p {
+  color: var(--cor-texto-secundario);
+  line-height: 1.5;
+}
+
+/* ======================================================================================== */
+/* TELA DE BOAS-VINDAS */
+/* ======================================================================================== */
+
+.boas-vindas {
+  background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-primaria-escura) 100%);
+}
+
+.boas-vindas .screen-header {
+  background: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.boas-vindas .screen-title {
+  color: white;
+}
+
+.welcome-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espaco-2xl) var(--espaco-lg);
+  text-align: center;
+  color: white;
+}
+
+.welcome-icon {
+  font-size: 64px;
+  margin-bottom: var(--espaco-lg);
+  animation: wave 2s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
+
+.welcome-content h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: var(--espaco-sm);
+}
+
+.welcome-content p {
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: var(--espaco-md);
+  opacity: 0.9;
+}
+
+.welcome-content .primary-button {
+  background: white;
+  color: var(--cor-primaria);
+  margin-top: var(--espaco-lg);
+}
+
+.welcome-content .primary-button:hover {
+  background: #f8fafc;
+  color: var(--cor-primaria-escura);
+}
+
+/* ======================================================================================== */
+/* TELA DE CARRINHO DE COMPRAS */
+/* ======================================================================================== */
+
+.carrinho-compras {
+  /* Usa cores padrão */
+}
+
+.carrinho-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--espaco-lg);
+  overflow-y: auto;
+}
+
+/* Lista de itens do carrinho */
+.itens-carrinho {
+  flex: 1;
+  margin-bottom: var(--espaco-lg);
+}
+
+.itens-carrinho h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--cor-texto);
+  margin-bottom: var(--espaco-md);
+  padding-bottom: var(--espaco-sm);
+  border-bottom: 2px solid var(--cor-borda);
+}
+
+/* Item individual do carrinho */
+.item-carrinho {
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-medio);
+  padding: var(--espaco-md);
+  margin-bottom: var(--espaco-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-md);
+  box-shadow: var(--sombra-suave);
+  transition: all var(--transicao-rapida);
+}
+
+.item-carrinho:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--sombra-media);
+}
+
+.item-info {
+  flex: 1;
+}
+
+.item-info h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--cor-texto);
+  margin-bottom: var(--espaco-xs);
+}
+
+.item-preco {
+  font-size: 14px;
+  color: var(--cor-texto-secundario);
+}
+
+.item-quantidade {
+  background: var(--cor-superficie-escura);
+  padding: var(--espaco-xs) var(--espaco-sm);
+  border-radius: var(--raio-pequeno);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--cor-texto-secundario);
+}
+
+.item-subtotal {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cor-primaria);
+}
+
+/* Resumo do carrinho */
+.resumo-carrinho {
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-medio);
+  padding: var(--espaco-lg);
+  box-shadow: var(--sombra-suave);
+}
+
+.linha-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--espaco-md) 0;
+  border-bottom: 2px solid var(--cor-borda);
+  margin-bottom: var(--espaco-lg);
+}
+
+.linha-total span {
+  font-size: 16px;
+  color: var(--cor-texto-secundario);
+}
+
+.linha-total strong {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--cor-texto);
+}
+
+.finalizar-button {
+  background: var(--cor-sucesso);
+  font-size: 18px;
+  padding: var(--espaco-lg);
+  margin-top: var(--espaco-md);
+}
+
+.finalizar-button:hover {
+  background: #059669;
+}
+
+/* ======================================================================================== */
+/* TELA DE RECIBO */
+/* ======================================================================================== */
+
+.recibo {
+  /* Usa cores padrão */
+}
+
+.recibo-content {
+  flex: 1;
+  padding: var(--espaco-lg);
+  overflow-y: auto;
+}
+
+/* Cabeçalho do recibo */
+.recibo-header {
+  text-align: center;
+  margin-bottom: var(--espaco-2xl);
+}
+
+.sucesso-icon {
+  font-size: 64px;
+  margin-bottom: var(--espaco-lg);
+  animation: bounce 1s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.recibo-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--cor-sucesso);
+  margin-bottom: var(--espaco-sm);
+}
+
+.recibo-header p {
+  font-size: 16px;
+  color: var(--cor-texto-secundario);
+}
+
+/* Detalhes da compra */
+.detalhes-compra {
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-medio);
+  padding: var(--espaco-lg);
+  margin-bottom: var(--espaco-lg);
+  box-shadow: var(--sombra-suave);
+}
+
+.detalhe-linha {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--espaco-sm) 0;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.detalhe-linha:last-child {
+  border-bottom: none;
+}
+
+.detalhe-linha span {
+  font-size: 14px;
+  color: var(--cor-texto-secundario);
+}
+
+.detalhe-linha strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cor-texto);
+}
+
+.total-linha {
+  border-top: 2px solid var(--cor-borda);
+  margin-top: var(--espaco-sm);
+  padding-top: var(--espaco-md);
+  border-bottom: none !important;
+}
+
+.total-linha span {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--cor-texto);
+}
+
+.total-linha strong {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--cor-sucesso);
+}
+
+/* Itens comprados */
+.itens-comprados {
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-medio);
+  padding: var(--espaco-lg);
+  margin-bottom: var(--espaco-lg);
+  box-shadow: var(--sombra-suave);
+}
+
+.itens-comprados h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--cor-texto);
+  margin-bottom: var(--espaco-md);
+  padding-bottom: var(--espaco-sm);
+  border-bottom: 2px solid var(--cor-borda);
+}
+
+.item-comprado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--espaco-sm) 0;
+  border-bottom: 1px solid var(--cor-borda);
+  font-size: 14px;
+}
+
+.item-comprado:last-child {
+  border-bottom: none;
+}
+
+.item-comprado span:first-child {
+  flex: 1;
+  font-weight: 500;
+  color: var(--cor-texto);
+}
+
+.item-comprado span:nth-child(2) {
+  color: var(--cor-texto-secundario);
+  margin-right: var(--espaco-md);
+}
+
+.item-comprado span:last-child {
+  font-weight: 600;
+  color: var(--cor-primaria);
+}
+
+/* Ações do recibo */
+.recibo-acoes {
+  margin-top: var(--espaco-2xl);
+}
+
+/* ======================================================================================== */
+/* RESPONSIVIDADE */
+/* ======================================================================================== */
+
+/* Para telas muito pequenas */
+@media (max-width: 400px) {
+  .simulacao-telefone {
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+  }
+  
+  .simulacao-telefone::before {
+    display: none;
+  }
+  
+  .app-completo {
+    padding: 0;
+  }
+  
+  .controles-teste {
+    display: none; /* Oculta controles de teste em telas pequenas */
+  }
+}
+
+/* Para tablets */
+@media (min-width: 768px) {
+  .app-completo {
+    padding: var(--espaco-2xl);
+  }
+  
+  .simulacao-telefone {
+    margin: 0 auto;
+  }
+}
+
+/* ======================================================================================== */
+/* ANIMAÇÕES E TRANSIÇÕES EXTRAS */
+/* ======================================================================================== */
+
+/* Animação de entrada para componentes */
+.screen-container {
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover suave para itens interativos */
+.item-carrinho,
+.detalhe-linha,
+.item-comprado {
+  transition: all var(--transicao-rapida);
+}
+
+/* Estados de foco para acessibilidade */
+.primary-button:focus,
+.back-button:focus,
+.retry-button:focus {
+  outline: 2px solid var(--cor-primaria);
+  outline-offset: 2px;
+}
+
+/* ======================================================================================== */
+/* UTILITÁRIOS */
+/* ======================================================================================== */
+
+/* Classe para ocultar elementos visuais mas manter acessibilidade */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Classe para texto truncado */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Classe para remover scroll customizado */
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+/* Remover scroll bars mas manter funcionalidade */
+.custom-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--cor-borda) transparent;
+}
+
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--cor-borda);
+  border-radius: 3px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: var(--cor-texto-claro);
+}
