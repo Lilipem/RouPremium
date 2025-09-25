@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './TelaAppCliente.css';
 
+const API_URL = 'http://localhost:3000/api';
+
 /**
  * COMPONENTE PRINCIPAL - TELA APP CLIENTE
  * 
